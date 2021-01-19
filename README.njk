@@ -1,0 +1,66 @@
+{%- include "installation" -%}
+
+# Synopsis
+```ts
+import getHelp, { chalk } from "meow-helper";
+```
+
+```js
+const { default: getHelp, chalk } = require("meow-helper");
+```
+
+```ts
+ const flags = {
+   cwd: { alias: "c", type: "string", desc: "Current CWD." },
+   verbose: { alias: "v", type: "boolean", desc: "Add extra info." }
+ };
+
+ const args = { path: "Path of file." };
+
+ meow(getHelp({flags, args}), { flags });
+```
+
+```ts
+const help = getHelp({
+  lineLength: 80,
+  titleLength: 15,
+  pkg: {}, // package.json data
+  command: "not-sync",
+  description: "Description of the command",
+  args: { path: "Path of file." },
+  flags: {}, // meow flags
+  examples: ["not-sync node_modules,dist,coverage", "not-sync node_modules,dist,coverage --ignoreConfigs .gitignore"],
+  multilineThreshold: 50,
+})
+```
+
+# Details
+
+Generates single line or multiline help text. Decides automatically based on the `multilineThreshold` option.
+
+## Single Line
+[![meow-helper help text in single line mode](./module-files/images/single-line.png)]
+
+## Multi Line
+[![meow-helper help text in multi line mode](./module-files/images/multi-line.png)]
+
+
+# Highlights
+
+- Nicely formats, colorized, and aligns arguments, options, default values and their descriptions.
+- Supports maximum line length and automatic word wrap.
+- Automatically split options into two lines if space for description is too small. (Can be changed with `multilineThreshold` option.)
+- Automatically switches single line to multi-line, if space for options descriptions is less than the `multilineThreshold` option.
+- Color output with background colored titles.
+- Automatically generates usage section.
+- Automatically colorize `command` in usage and examples if they start with command.
+- Automatically adds `$` at the beginning of manually provided usage and examples sections.
+- Also exports [chalk](https://www.npmjs.com/package/chalk) to be utilized by importing module without installing chalk.
+
+<!-- usage -->
+
+<!-- commands -->
+
+# API
+
+{% include "api.md" %}
