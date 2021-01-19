@@ -1,5 +1,8 @@
+import chalk from "chalk";
 import getHelp from "../src/index";
 import type { ExtendedFlags } from "../src/get-help";
+
+chalk.level = 0;
 
 const cliFlags: ExtendedFlags = {
   cwd: { alias: "c", type: "string", desc: "Set current working directory for relative paths." },
