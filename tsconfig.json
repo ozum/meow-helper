@@ -1,4 +1,6 @@
 {
   "extends": "./module-files/configs/tsconfig.json",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "importHelpers": false
+  }
 }

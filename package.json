@@ -45,12 +45,11 @@
     "postinstall": "is-ci || husky install",
     "postpublish": "pinst --enable",
     "prepublishOnly": "pinst --disable",
-    "yo:update": "yo tsmod:uninstall --no-install --force && yo 'tsmod' '--typedoc'"
+    "yo:update": "yo tsmod:uninstall --no-install --force && yo 'tsmod' '--typedoc' '--no-import-helpers'"
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "cliui": "^7.0.4",
-    "tslib": "^2.1.0"
+    "cliui": "^7.0.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
@@ -77,10 +76,10 @@
     "readmeasy": "^0.2.7",
     "ts-jest": "^26.2.0",
     "ts-node-dev": "^1.1.1",
-    "typedoc": "^0.20.14",
-    "typedoc-neo-theme": "^1.0.10",
+    "typedoc": "^0.20.16",
+    "typedoc-neo-theme": "^1.1.0",
     "typedoc-plugin-example-tag": "^1.0.2",
-    "typedoc-plugin-markdown": "^3.4.0",
+    "typedoc-plugin-markdown": "^3.4.1",
     "typescript": "^4.1.3"
   }
 }
