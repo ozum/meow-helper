@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getHelp() should generate help without options. 1`] = `
+"
+     USAGE     
+
+$ not-sync <path>
+
+   ARGUMENTS   
+
+<path> some
+"
+`;
+
+exports[`getHelp() should generate name details if \`autoHelp\` is false. 1`] = `
+"
+not-sync
+
+Desc
+
+     USAGE     
+
+$ not-sync
+"
+`;
+
+exports[`getHelp() should generate name details without command and description if \`autoHelp\` is false. 1`] = `
+"
+not-sync
+
+     USAGE     
+
+$ not-sync <path>...
+
+   ARGUMENTS   
+
+<path>... some
+"
+`;
+
+exports[`getHelp() should return help text. 1`] = `
+"
+     USAGE     
+
+$ not-sync [options] <path>...
+$ not-sync <path>...
+
+   ARGUMENTS   
+
+<path> Path or list of paths to disable syncronization for.
+<cli>  use cli
+
+    OPTIONS    
+
+-c --cwd
+     Set current working directory for relative paths.
+-i --ignoreConfigs                                  (Default: node_modules,dist)
+     (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add
+     new created files if any.
+-d --dry
+     Prevents changes to be written to disk. Executes a dry run.
+-v --verbose                                                     (Default: true)
+     Outputs extra information.
+--linkSameDir
+     Move files near original one for iCloudDrive. For example 'dist' is moved
+     'dist.nosync' in same directory.
+
+    EXAMPLES   
+
+$ not-sync node_modules,dist,coverage
+"
+`;
+
+exports[`getHelp() should use default values. 1`] = `
+"
+     USAGE     
+
+$ not-sync [options]
+
+    OPTIONS    
+
+-c --cwd                                        Set current working directory for relative paths.
+-i --ignoreConfigs (Default: node_modules,dist) (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add new created files if any.
+-d --dry                                        Prevents changes to be written to disk. Executes a dry run.
+-v --verbose       (Default: true)              Outputs extra information.
+--linkSameDir                                   Move files near original one for iCloudDrive. For example 'dist' is moved 'dist.nosync' in same directory.
+"
+`;
+
+exports[`getHelp() should use package.json data. 1`] = `
+"
+     USAGE     
+
+$ not-sync [options]
+
+    OPTIONS    
+
+-c --cwd                                        Set current working directory for relative paths.
+-i --ignoreConfigs (Default: node_modules,dist) (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add new created files if any.
+-d --dry                                        Prevents changes to be written to disk. Executes a dry run.
+-v --verbose       (Default: true)              Outputs extra information.
+--linkSameDir                                   Move files near original one for iCloudDrive. For example 'dist' is moved 'dist.nosync' in same directory.
+"
+`;
