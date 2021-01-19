@@ -108,7 +108,7 @@ meow(getHelp({ flags, args }), { flags });
 
 **Returns:** _string_
 
-Defined in: [get-help.ts:157](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L157)
+Defined in: [get-help.ts:157](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L157)
 
 # Interfaces
 
@@ -147,7 +147,7 @@ Options for generating a help text.
 
 Name and description of positional arguments.
 
-Defined in: [get-help.ts:23](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L23)
+Defined in: [get-help.ts:23](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L23)
 
 ---
 
@@ -157,7 +157,7 @@ Defined in: [get-help.ts:23](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 Name of the command.
 
-Defined in: [get-help.ts:17](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L17)
+Defined in: [get-help.ts:17](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L17)
 
 ---
 
@@ -167,7 +167,7 @@ Defined in: [get-help.ts:17](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 Command description.
 
-Defined in: [get-help.ts:19](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L19)
+Defined in: [get-help.ts:19](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L19)
 
 ---
 
@@ -177,7 +177,7 @@ Defined in: [get-help.ts:19](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 A single example or list of examples. If lines start with the command, it will be colored automatically. Also prefixed with `$`.
 
-Defined in: [get-help.ts:27](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L27)
+Defined in: [get-help.ts:27](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L27)
 
 ---
 
@@ -187,7 +187,7 @@ Defined in: [get-help.ts:27](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 Flags provided to meow. Uses `desc` key for the description.
 
-Defined in: [get-help.ts:25](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L25)
+Defined in: [get-help.ts:25](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L25)
 
 ---
 
@@ -197,7 +197,7 @@ Defined in: [get-help.ts:25](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 Line length to be used. Longer text will be word-wrapped.
 
-Defined in: [get-help.ts:11](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L11)
+Defined in: [get-help.ts:11](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L11)
 
 ---
 
@@ -207,7 +207,7 @@ Defined in: [get-help.ts:11](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 If space available for option descriptions is less than this threshold, descriptions are given their own rows. So they have more space. See images above.
 
-Defined in: [get-help.ts:29](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L29)
+Defined in: [get-help.ts:29](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L29)
 
 ---
 
@@ -217,7 +217,7 @@ Defined in: [get-help.ts:29](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 `package.json` data.
 
-Defined in: [get-help.ts:15](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L15)
+Defined in: [get-help.ts:15](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L15)
 
 ---
 
@@ -227,7 +227,7 @@ Defined in: [get-help.ts:15](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 The total length of the colored background area of titles.
 
-Defined in: [get-help.ts:13](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L13)
+Defined in: [get-help.ts:13](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L13)
 
 ---
 
@@ -237,4 +237,4 @@ Defined in: [get-help.ts:13](https://github.com/ozum/meow-helper/blob/8961c02/sr
 
 A single usage or list of usages. If lines start with the command, it will be colored automatically. Also prefixed with `$`.
 
-Defined in: [get-help.ts:21](https://github.com/ozum/meow-helper/blob/8961c02/src/get-help.ts#L21)
+Defined in: [get-help.ts:21](https://github.com/ozum/meow-helper/blob/d2e3aae/src/get-help.ts#L21)
