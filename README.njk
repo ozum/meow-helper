@@ -43,16 +43,16 @@ const help = getHelp({
 
 Generates single line or multiline help text. Decides automatically based on the `multilineThreshold` option.
 
-## Single Line
+## Single-Line
 ![meow-helper help text in single line mode](./module-files/images/single-line.png)
 
-## Multi Line
+## Multi-Line
 ![meow-helper help text in multi line mode](./module-files/images/multi-line.png)
 
 # Highlights
 
 - Nicely formats, colorized, and aligns arguments, options, default values and their descriptions.
-- With `allowUnknownFlags` option of meow, logs help if unknown flag is provided. Also exits with code 0 instead of 2. Can be changed with option `notThrow`.
+- With the `allowUnknownFlags` option of meow, logs help if an unknown flag is provided. Also exits with code 0 instead of 2. Can be changed with the option `notThrow`.
 - Supports maximum line length and automatic word wrap.
 - Automatically split options into two lines if space for description is too small. (Can be changed with `multilineThreshold` option.)
 - Automatically switches single line to multi-line, if space for options descriptions is less than the `multilineThreshold` option.

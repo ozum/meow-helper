@@ -29,7 +29,7 @@ export interface HelpOptions {
   multilineThreshold?: number;
   /** Whether the auto-help function of `meow` is used. If true description is not added, because meow adds it automatically. */
   autoHelp?: boolean;
-  /** Whether to throw error when `meow` exists with exit code 2. If true, it adds `process.on("exit")` to show help and exits with code 0. */
+  /** Whether to throw an error when `meow` exists with exit code 2. If true, it adds `process.on("exit")` to show help and exits with code 0. */
   notThrow?: boolean;
   /** @ignore */
   ui?: any;
