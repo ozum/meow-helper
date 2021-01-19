@@ -2,7 +2,7 @@ import chalk from "chalk";
 import getHelp from "../src/index";
 import type { ExtendedFlags } from "../src/get-help";
 
-chalk.level = 0;
+chalk.level = 3;
 
 const cliFlags: ExtendedFlags = {
   cwd: { alias: "c", type: "string", desc: "Set current working directory for relative paths." },
@@ -21,11 +21,15 @@ const cliFlags: ExtendedFlags = {
 };
 
 describe("getHelp()", () => {
+  it("should throw if command cannot be found.", () => {
+    expect(() => getHelp({ autoHelp: false, args: { path: "some" } })).toThrow("Either 'command'");
+  });
+
   it("should return help text.", () => {
     const help = getHelp({
       multilineThreshold: 50,
       command: "not-sync",
-      lineLength: 120,
+      lineLength: 80,
       usage: ["not-sync [options] <path>...", "not-sync <path>..."],
       description: "Disable file synchronization for files in an auto detected cloud storage such as Dropbox, iCloudDrive or OneDrive.",
       args: { path: "Path or list of paths to disable syncronization for.", cli: "use cli" },
@@ -36,7 +40,7 @@ describe("getHelp()", () => {
   });
 
   it("should use default values.", () => {
-    const help = getHelp({ flags: cliFlags });
+    const help = getHelp({ flags: cliFlags, command: "not-sync" });
     expect(help).toMatchSnapshot();
   });
 
@@ -48,5 +52,20 @@ describe("getHelp()", () => {
   it("should generate help without options.", () => {
     const help = getHelp({ args: { path: "some" }, command: "not-sync" });
     expect(help).toMatchSnapshot();
+  });
+
+  it("should generate name details if `autoHelp` is false.", () => {
+    const help = getHelp({ autoHelp: false, command: "not-sync", description: "Desc" });
+    expect(help).toMatchSnapshot();
+  });
+
+  it("should generate name details without command and description if `autoHelp` is false.", () => {
+    const help = getHelp({ autoHelp: false, command: "not-sync", args: { "path...": "some" } });
+    expect(help).toMatchSnapshot();
+  });
+
+  it("should throw if process exit with code 2.", () => {
+    getHelp({ command: "not-sync", notThrow: false });
+    expect(true).toBe(true);
   });
 });

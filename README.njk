@@ -3,21 +3,24 @@
 # Synopsis
 ```ts
 import getHelp, { chalk } from "meow-helper";
+import { readFileSync } from "fs";
 ```
 
 ```js
 const { default: getHelp, chalk } = require("meow-helper");
+const { readFileSync } = require("fs");
 ```
 
 ```ts
- const flags = {
-   cwd: { alias: "c", type: "string", desc: "Current CWD." },
-   verbose: { alias: "v", type: "boolean", desc: "Add extra info." }
- };
+const flags = {
+  cwd: { alias: "c", type: "string", desc: "Current CWD." },
+  verbose: { alias: "v", type: "boolean", desc: "Add extra info." }
+};
 
- const args = { path: "Path of file." };
+const args = { path: "Path of file." };
+const pkg = JSON.parse(readFileSync(join(__dirname, "../../package.json"), { encoding: "utf8" }));
 
- meow(getHelp({flags, args}), { flags });
+meow(getHelp({ flags, args, pkg }), { flags, allowUnknownFlags: false });
 ```
 
 ```ts
@@ -28,9 +31,11 @@ const help = getHelp({
   command: "not-sync",
   description: "Description of the command",
   args: { path: "Path of file." },
-  flags: {}, // meow flags
+  flags,
   examples: ["not-sync node_modules,dist,coverage", "not-sync node_modules,dist,coverage --ignoreConfigs .gitignore"],
   multilineThreshold: 50,
+  autoHelp: true,
+  notThrow: true,
 })
 ```
 
@@ -44,10 +49,10 @@ Generates single line or multiline help text. Decides automatically based on the
 ## Multi Line
 ![meow-helper help text in multi line mode](./module-files/images/multi-line.png)
 
-
 # Highlights
 
 - Nicely formats, colorized, and aligns arguments, options, default values and their descriptions.
+- With `allowUnknownFlags` option of meow, logs help if unknown flag is provided. Also exits with code 0 instead of 2. Can be changed with option `notThrow`.
 - Supports maximum line length and automatic word wrap.
 - Automatically split options into two lines if space for description is too small. (Can be changed with `multilineThreshold` option.)
 - Automatically switches single line to multi-line, if space for options descriptions is less than the `multilineThreshold` option.
@@ -56,6 +61,7 @@ Generates single line or multiline help text. Decides automatically based on the
 - Automatically colorize `command` in usage and examples if they start with command.
 - Automatically adds `$` at the beginning of manually provided usage and examples sections.
 - Also exports [chalk](https://www.npmjs.com/package/chalk) to be utilized by importing module without installing chalk.
+- Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds description to help if required.
 
 <!-- usage -->
 

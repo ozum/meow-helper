@@ -27,10 +27,13 @@ export interface HelpOptions {
   examples?: string | string[];
   /** If space available for option descriptions is less than this threshold, descriptions are given their own rows. So they have more space. See images above. */
   multilineThreshold?: number;
+  /** Whether the auto-help function of `meow` is used. If true description is not added, because meow adds it automatically. */
+  autoHelp?: boolean;
+  /** Whether to throw error when `meow` exists with exit code 2. If true, it adds `process.on("exit")` to show help and exits with code 0. */
+  notThrow?: boolean;
+  /** @ignore */
+  ui?: any;
 }
-
-/** ignore */
-type OptionsWithDefaults = HelpOptions & { titleLength: number; lineLength: number; multilineThreshold: number; ui: any };
 
 const { cyan, yellow } = chalk;
 
@@ -53,10 +56,7 @@ export function arrify<T>(input?: T | T[]): T[] {
 }
 
 /** Get maximum length of option name, default value length and argument name. */
-function getMaxLengths({
-  flags = {} as any,
-  args = {} as any,
-}: OptionsWithDefaults): { maxNameLength: number; maxDefaultLength: number; maxArgLength: number } {
+function getMaxLengths({ flags, args }: Required<HelpOptions>): { maxNameLength: number; maxDefaultLength: number; maxArgLength: number } {
   const maxNameLength = Object.keys(flags).reduce((currentMax, name) => (name.length + 6 > currentMax ? name.length + 6 : currentMax), 0);
   const maxDefaultLength = Object.entries(flags).reduce((currentMax, [, flag]) => {
     const currentLength = flag.default ? flag.default.toString().length + 12 : 0;
@@ -66,18 +66,18 @@ function getMaxLengths({
   return { maxNameLength, maxDefaultLength, maxArgLength };
 }
 
-/** Get command name from options or "name" in package.json data. */
-function getCommand(options: OptionsWithDefaults): string {
-  return options.command ?? options.pkg?.name;
+/** Return arg name colorized and between brackets (`<>`). If arg name ends with `...`, add `...` after bracket. */
+function getArg(arg: string): string {
+  return cyan(arg.endsWith("...") ? `<${arg.replace(/...$/, "")}>...` : `<${arg}>`);
 }
 
 /** Colorize command if string starts with command. */
-function colorizeCommand(text: string, options: OptionsWithDefaults): string {
-  return text.replace(new RegExp(`^(${getCommand(options)})`), chalk`{green $1}`);
+function colorizeCommand(text: string, options: Required<HelpOptions>): string {
+  return text.replace(new RegExp(`^(${options.command})`), chalk`{green $1}`);
 }
 
 /** Add title to help text. */
-function addTitle(title: keyof typeof TITLE_COLORS, options: OptionsWithDefaults): void {
+function addTitle(title: keyof typeof TITLE_COLORS, options: Required<HelpOptions>): void {
   const prefixSpace = " ".repeat(Math.ceil((options.titleLength - title.length) / 2));
   const suffixSpace = " ".repeat(options.titleLength - title.length - prefixSpace.length);
   const titleString = TITLE_COLORS[title](`${prefixSpace}${title.toUpperCase()}${suffixSpace}`);
@@ -85,22 +85,20 @@ function addTitle(title: keyof typeof TITLE_COLORS, options: OptionsWithDefaults
 }
 
 /** Add usage to help text. */
-function addUsage(options: OptionsWithDefaults): void {
-  const command = getCommand(options);
+function addUsage(options: Required<HelpOptions>): void {
   const usage = arrify(options.usage);
-  if (usage.length > 0 || command) addTitle("usage", options);
-
+  addTitle("usage", options);
   if (usage.length > 0) {
     usage.forEach((line) => options.ui.div(chalk`{dim $} ${colorizeCommand(line, options)}`));
-  } else if (command) {
-    const flagsText = options.flags && Object.keys(options.flags).length > 0 ? `${yellow("<options>")} ` : "";
-    const argsText = options.args && Object.keys(options.args).length > 0 ? Object.keys(options.args).map((arg) => `${cyan(arg)}`) : "";
-    options.ui.div(chalk`{dim $} {green ${command}} ${flagsText}${argsText}`);
+  } else {
+    const flagsText = options.flags && Object.keys(options.flags).length > 0 ? `${yellow("[options]")} ` : "";
+    const argsText = options.args && Object.keys(options.args).length > 0 ? Object.keys(options.args).map(getArg) : "";
+    options.ui.div(chalk`{dim $} {green ${options.command}} ${flagsText}${argsText}`);
   }
 }
 
 /** Add examples to help text. */
-function addExamples(options: OptionsWithDefaults): void {
+function addExamples(options: Required<HelpOptions>): void {
   const examples = arrify(options.examples);
   if (examples.length > 0) {
     addTitle("examples", options);
@@ -109,16 +107,16 @@ function addExamples(options: OptionsWithDefaults): void {
 }
 
 /** Add command arguments to help text. */
-function addArguments(maxArgLength: number, options: OptionsWithDefaults): void {
+function addArguments(maxArgLength: number, options: Required<HelpOptions>): void {
   if (!options.args || Object.keys(options.args).length === 0) return;
   addTitle("arguments", options);
   Object.entries(options.args).forEach(([argName, desc]) => {
-    options.ui.div({ text: chalk`{cyan <${argName}>}`, width: maxArgLength }, { text: desc });
+    options.ui.div({ text: getArg(argName), width: maxArgLength }, { text: desc });
   });
 }
 
 /** Add command options to help text. */
-function addOptions(maxNameLength: number, maxDefaultLength: number, options: OptionsWithDefaults): void {
+function addOptions(maxNameLength: number, maxDefaultLength: number, options: Required<HelpOptions>): void {
   const { flags } = options;
   if (!flags || Object.keys(flags).length === 0) return;
 
@@ -154,20 +152,53 @@ function addOptions(maxNameLength: number, maxDefaultLength: number, options: Op
  *
  * meow(getHelp({flags, args}), { flags });
  */
+// export default function getHelp(helpOptions: HelpOptions): string {
 export default function getHelp(helpOptions: HelpOptions): string {
-  const lineLength = helpOptions.lineLength ?? 80;
+  const lineLength = helpOptions.lineLength || 1000;
   const ui = cliui({ width: lineLength });
-  const options: OptionsWithDefaults = { lineLength, titleLength: 15, multilineThreshold: 50, ...helpOptions, ui };
-  const description = options.description ?? options.pkg?.description;
-  const { maxNameLength, maxDefaultLength, maxArgLength } = getMaxLengths(options);
-  const command = getCommand(options);
+  const options: Required<HelpOptions> = {
+    lineLength,
+    titleLength: 15,
+    pkg: {},
+    command: helpOptions.pkg && helpOptions.pkg.name,
+    description: helpOptions.pkg && helpOptions.pkg.description,
+    usage: [],
+    args: {},
+    flags: {},
+    examples: [],
+    multilineThreshold: 50,
+    autoHelp: true,
+    notThrow: true,
+    ...helpOptions,
+    ui,
+  };
 
-  if (command) ui.div({ text: chalk`{bold ${command}}`, padding: [1, 0, 0, 0], border: true });
-  if (description) options.ui.div(`${description}`);
+  if (!options.command) throw new Error("Either 'command' or 'pkg' with name is required.");
+  const { maxNameLength, maxDefaultLength, maxArgLength } = getMaxLengths(options);
+
+  // meow autoHelp shows description from package.json automatically.
+  if (!options.autoHelp) {
+    ui.div({ text: chalk`{bold.green ${options.command}}`, padding: [1, 0, 0, 0] });
+    if (options.description) options.ui.div({ text: `${options.description}`, padding: [1, 0, 0, 0] });
+  }
+
   addUsage(options);
   addArguments(maxArgLength, options);
   addOptions(maxNameLength, maxDefaultLength, options);
   addExamples(options);
   ui.div("");
-  return options.ui.toString();
+  const help = options.ui.toString();
+
+  if (options.notThrow) {
+    /* istanbul ignore next */
+    process.on("exit", (code) => {
+      if (code === 2) {
+        console.log(help); // eslint-disable-line no-console
+        process.exit(0);
+      }
+      process.exit(code);
+    });
+  }
+
+  return help;
 }
