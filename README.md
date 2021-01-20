@@ -61,7 +61,7 @@ const help = getHelp({
 - Generates usage section.
 - Colorizes `command` at the start of usage and examples.
 - Adds `$` at the start of provided `usage` and `examples`.
-- Exports [chalk](https://www.npmjs.com/package/chalk).
+- Exports [chalk](https://www.npmjs.com/package/chalk) and [cliui](https://www.npmjs.com/package/cliui).
 - Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds a description to help if required.
 - Moves three dots in arguments outside of brackets. For example: `args: { “path...” }` becomes `command <path>...`
 
@@ -83,9 +83,21 @@ meow-helper
 
 - [HelpOptions](#interfaceshelpoptionsmd)
 
+### Variables
+
+- [cliui](#cliui)
+
 ### Functions
 
 - [default](#default)
+
+## Variables
+
+### cliui
+
+• `Const` **cliui**: _any_
+
+Defined in: [index.ts:4](https://github.com/ozum/meow-helper/blob/2e2a19a/src/index.ts#L4)
 
 ## Functions
 
@@ -116,7 +128,7 @@ meow(getHelp({ flags, args }), { flags });
 
 **Returns:** _string_
 
-Defined in: [get-help.ts:156](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L156)
+Defined in: [get-help.ts:156](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L156)
 
 # Interfaces
 
@@ -157,7 +169,7 @@ Options below modify behaviour of [[getHelp]] function.
 
 Name and description of positional arguments.
 
-Defined in: [get-help.ts:23](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L23)
+Defined in: [get-help.ts:23](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L23)
 
 ---
 
@@ -167,7 +179,7 @@ Defined in: [get-help.ts:23](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 This option sets whether the `autoHelp` option of `meow` is used. If this is true, the description text is not added, because meow adds it automatically.
 
-Defined in: [get-help.ts:31](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L31)
+Defined in: [get-help.ts:31](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L31)
 
 ---
 
@@ -177,7 +189,7 @@ Defined in: [get-help.ts:31](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 Name of the command.
 
-Defined in: [get-help.ts:17](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L17)
+Defined in: [get-help.ts:17](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L17)
 
 ---
 
@@ -187,7 +199,7 @@ Defined in: [get-help.ts:17](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 Command description.
 
-Defined in: [get-help.ts:19](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L19)
+Defined in: [get-help.ts:19](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L19)
 
 ---
 
@@ -197,7 +209,7 @@ Defined in: [get-help.ts:19](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 A single example or list of examples can be provided to show in the help text. Lines are prefixed with `$` and the command is colored automatically.
 
-Defined in: [get-help.ts:27](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L27)
+Defined in: [get-help.ts:27](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L27)
 
 ---
 
@@ -207,7 +219,7 @@ Defined in: [get-help.ts:27](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 Flags provided to meow. Uses `desc` key for the description.
 
-Defined in: [get-help.ts:25](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L25)
+Defined in: [get-help.ts:25](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L25)
 
 ---
 
@@ -217,7 +229,7 @@ Defined in: [get-help.ts:25](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 Text longer than line length will be word-wrapped.
 
-Defined in: [get-help.ts:11](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L11)
+Defined in: [get-help.ts:11](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L11)
 
 ---
 
@@ -227,7 +239,7 @@ Defined in: [get-help.ts:11](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 If space available for option descriptions is less than this threshold, descriptions are given their own rows. So they have more space. See images above.
 
-Defined in: [get-help.ts:29](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L29)
+Defined in: [get-help.ts:29](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L29)
 
 ---
 
@@ -237,7 +249,7 @@ Defined in: [get-help.ts:29](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 Whether to throw an error when `meow` exits with exit code 2. If true, it adds `process.on("exit")` to show help and exits with code 0.
 
-Defined in: [get-help.ts:33](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L33)
+Defined in: [get-help.ts:33](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L33)
 
 ---
 
@@ -247,7 +259,7 @@ Defined in: [get-help.ts:33](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 `package.json` data.
 
-Defined in: [get-help.ts:15](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L15)
+Defined in: [get-help.ts:15](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L15)
 
 ---
 
@@ -257,7 +269,7 @@ Defined in: [get-help.ts:15](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 The total length of the colored background area of titles.
 
-Defined in: [get-help.ts:13](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L13)
+Defined in: [get-help.ts:13](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L13)
 
 ---
 
@@ -267,4 +279,4 @@ Defined in: [get-help.ts:13](https://github.com/ozum/meow-helper/blob/0039f29/sr
 
 Uasge text is shown at the beginning of help text. Lines are prefixed with `$` and command is colored automatically.
 
-Defined in: [get-help.ts:21](https://github.com/ozum/meow-helper/blob/0039f29/src/get-help.ts#L21)
+Defined in: [get-help.ts:21](https://github.com/ozum/meow-helper/blob/2e2a19a/src/get-help.ts#L21)
