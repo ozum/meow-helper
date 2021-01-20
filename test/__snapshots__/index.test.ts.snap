@@ -46,8 +46,8 @@ $ not-sync [options]
 
     OPTIONS    
 
---path                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   a
---cwd                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    b
+--path     a
+--cwd      b
 "
 `;
 

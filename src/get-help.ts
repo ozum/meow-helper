@@ -65,7 +65,7 @@ function getMaxLengths({ flags, args }: Required<HelpOptions>): { maxNameLength:
   const maxDefaultLength = Object.entries(flags).reduce((currentMax, [, flag]) => {
     const currentLength = flag.default ? flag.default.toString().length + 12 : 0;
     return currentLength > currentMax ? currentLength : currentMax;
-  }, 0);
+  }, 1);
   const maxArgLength = Object.keys(args).reduce((currentMax, name) => (name.length + 3 > currentMax ? name.length + 3 : currentMax), 0);
   return { maxNameLength, maxDefaultLength, maxArgLength };
 }
