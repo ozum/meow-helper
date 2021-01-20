@@ -32,9 +32,9 @@ const { readFileSync } = require("fs");
 ```ts
 const flags = { ...commonFlags, cwd: { alias: "c", type: "string", desc: "Current CWD." } };
 const args = { "path...": "Paths of files." };
-const pkg = JSON.parse(readFileSync(join(__dirname, "../../package.json"), { encoding: "utf8" }));
+const pkg = JSON.parse(readFileSync(join(__dirname, "../package.json"), { encoding: "utf8" }));
 
-meow(getHelp({ flags, args, pkg }), { flags, allowUnknownFlags: false });
+meow(getHelp({ flags, args, pkg }), { flags, pkg, allowUnknownFlags: false });
 ```
 
 ```ts
