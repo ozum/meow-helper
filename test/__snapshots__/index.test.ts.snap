@@ -38,6 +38,19 @@ $ not-sync <path>...
 "
 `;
 
+exports[`getHelp() should generate options without any default value. 1`] = `
+"
+     USAGE     
+
+$ not-sync [options]
+
+    OPTIONS    
+
+--path                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   a
+--cwd                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    b
+"
+`;
+
 exports[`getHelp() should return help text. 1`] = `
 "
      USAGE     

@@ -68,4 +68,9 @@ describe("getHelp()", () => {
     getHelp({ command: "not-sync", notThrow: false });
     expect(true).toBe(true);
   });
+
+  it("should generate options without any default value.", () => {
+    const help = getHelp({ command: "not-sync", flags: { path: { desc: "a" }, cwd: { desc: "b" } } });
+    expect(help).toMatchSnapshot();
+  });
 });
