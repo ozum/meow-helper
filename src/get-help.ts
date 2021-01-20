@@ -3,7 +3,11 @@ import chalk from "chalk";
 
 const cliui = require("cliui"); // eslint-disable-line @typescript-eslint/no-var-requires
 
-export type ExtendedFlags = Record<string, AnyFlag & { desc: string }>;
+/** Meow flag extended with `desc` key. */
+export type ExtendedAnyFlag = AnyFlag & { desc: string };
+
+/** Record of extended any flag. */
+export type ExtendedAnyFlags = Record<string, ExtendedAnyFlag>;
 
 /** Options below modify behaviour of [[getHelp]] function. */
 export interface HelpOptions {
@@ -22,7 +26,7 @@ export interface HelpOptions {
   /** Name and description of positional arguments. */
   args?: Record<string, string>;
   /** Flags provided to meow. Uses `desc` key for the description. */
-  flags?: ExtendedFlags;
+  flags?: ExtendedAnyFlags;
   /** A single example or list of examples can be provided to show in the help text. Lines are prefixed with `$` and the command is colored automatically. */
   examples?: string | string[];
   /** If space available for option descriptions is less than this threshold, descriptions are given their own rows. So they have more space. See images above. */
@@ -143,14 +147,10 @@ function addOptions(maxNameLength: number, maxDefaultLength: number, options: Re
  *
  * @param helpOptions are options
  * @example
- * const flags = {
- *   cwd: { alias: "c", type: "string", desc: "Current CWD." },
- *   verbose: { alias: "v", type: "boolean", desc: "Add extra info." }
- * };
- *
+ * const flags: ExtendedFlags = { cwd: { alias: "c", type: "string", desc: "Current CWD." }, ...commonFlags };
  * const args = { path: "Path of file." };
  *
- * meow(getHelp({flags, args}), { flags });
+ * meow(getHelp({flags, args, pkg}), { flags, pkg, allowUnknownFlags: false });
  */
 // export default function getHelp(helpOptions: HelpOptions): string {
 export default function getHelp(helpOptions: HelpOptions): string {

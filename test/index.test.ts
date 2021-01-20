@@ -1,10 +1,10 @@
 import chalk from "chalk";
 import getHelp from "../src/index";
-import type { ExtendedFlags } from "../src/get-help";
+import type { ExtendedAnyFlags } from "../src/get-help";
 
 chalk.level = 0;
 
-const cliFlags: ExtendedFlags = {
+const cliFlags: ExtendedAnyFlags = {
   cwd: { alias: "c", type: "string", desc: "Set current working directory for relative paths." },
   ignoreConfigs: {
     alias: "i",

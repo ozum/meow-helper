@@ -18,11 +18,16 @@
 - Moves three dots in arguments outside of brackets. For example: `args: { “path...” }` becomes `command <path>...`
 
 # Synopsis
+
+**TypeScript**
+
 ```ts
-// TypeScript
 import getHelp, { commonFlags, chalk, cliui } from "meow-helper";
+import type { ExtendedFlags } from "meow-helper";
 import { readFileSync } from "fs";
 ```
+
+**CommonJS**
 
 ```js
 const { default: getHelp, commonFlags, chalk, cliui } = require("meow-helper");
@@ -30,7 +35,7 @@ const { readFileSync } = require("fs");
 ```
 
 ```ts
-const flags = { ...commonFlags, cwd: { alias: "c", type: "string", desc: "Current CWD." } };
+const flags: ExtendedFlags = { cwd: { alias: "c", type: "string", desc: "Current CWD." }, ...commonFlags };
 const args = { "path...": "Paths of files." };
 const pkg = JSON.parse(readFileSync(join(__dirname, "../package.json"), { encoding: "utf8" }));
 
