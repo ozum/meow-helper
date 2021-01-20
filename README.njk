@@ -1,22 +1,36 @@
 {%- include "installation" -%}
 
+# Highlights
+
+- Generates help text without effort.
+- Provides common flags. (`--help` and `--version`)
+- `meow` throws unknown flags with the `allowUnknownFlags` option. `meow-helper` shows help text instead of throwing. You can change this behavior with the `notThrow` option.
+- Formats, colorizes, and aligns arguments, options, default values, and their descriptions.
+- Supports maximum line length and automatic word wrap.
+- Splits options into two lines if space for description is too small. You can change this behavior with the `multilineThreshold` option.)
+- Switches single line to multi-line if option descriptions have a small space. You can change this behavior with the `multilineThreshold` option.
+- Color output with background colored titles.
+- Generates usage section.
+- Colorizes `command` at the start of usage and examples.
+- Adds `$` at the start of provided `usage` and `examples`.
+- Exports [chalk](https://www.npmjs.com/package/chalk) and [cliui](https://www.npmjs.com/package/cliui).
+- Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds a description to help if required.
+- Moves three dots in arguments outside of brackets. For example: `args: { “path...” }` becomes `command <path>...`
+
 # Synopsis
 ```ts
-import getHelp, { chalk } from "meow-helper";
+// TypeScript
+import getHelp, { commonFlags, chalk, cliui } from "meow-helper";
 import { readFileSync } from "fs";
 ```
 
 ```js
-const { default: getHelp, chalk } = require("meow-helper");
+const { default: getHelp, commonFlags, chalk, cliui } = require("meow-helper");
 const { readFileSync } = require("fs");
 ```
 
 ```ts
-const flags = {
-  cwd: { alias: "c", type: "string", desc: "Current CWD." },
-  verbose: { alias: "v", type: "boolean", desc: "Add extra info." }
-};
-
+const flags = { ...commonFlags, cwd: { alias: "c", type: "string", desc: "Current CWD." } };
 const args = { "path...": "Paths of files." };
 const pkg = JSON.parse(readFileSync(join(__dirname, "../../package.json"), { encoding: "utf8" }));
 
@@ -49,20 +63,7 @@ const help = getHelp({
 ## Multi-Line
 ![meow-helper help text in multi line mode](./module-files/images/multi-line.png)
 
-# Highlights
 
-- Formats, colorizes, and aligns arguments, options, default values, and their descriptions.
-- `meow` throws unknown flags with the `allowUnknownFlags` option. `meow-helper` shows help text instead of throwing. We can change this behavior with the `notThrow` option.
-- Supports maximum line length and automatic word wrap.
-- Splits options into two lines if space for description is too small. We can change this behavior with the `multilineThreshold` option.)
-- Switches single line to multi-line if option descriptions have a small space. We can change this behavior with the `multilineThreshold` option.
-- Color output with background colored titles.
-- Generates usage section.
-- Colorizes `command` at the start of usage and examples.
-- Adds `$` at the start of provided `usage` and `examples`.
-- Exports [chalk](https://www.npmjs.com/package/chalk) and [cliui](https://www.npmjs.com/package/cliui).
-- Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds a description to help if required.
-- Moves three dots in arguments outside of brackets. For example: `args: { “path...” }` becomes `command <path>...`
 
 <!-- usage -->
 
