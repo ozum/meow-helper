@@ -82,8 +82,8 @@ function colorizeCommand(text: string, options: Required<HelpOptions>): string {
 
 /** Add title to help text. */
 function addTitle(title: keyof typeof TITLE_COLORS, options: Required<HelpOptions>): void {
-  const prefixSpace = " ".repeat(Math.ceil((options.titleLength - title.length) / 2));
-  const suffixSpace = " ".repeat(options.titleLength - title.length - prefixSpace.length);
+  const prefixSpace = " ".repeat(Math.ceil((options.titleLength - title.length) / 2)); // Unicode Character “ ” (U+00A0) No-Break-Space
+  const suffixSpace = " ".repeat(options.titleLength - title.length - prefixSpace.length); // Unicode Character “ ” (U+00A0) No-Break-Space
   const titleString = TITLE_COLORS[title](`${prefixSpace}${title.toUpperCase()}${suffixSpace}`);
   options.ui.div({ text: titleString, padding: [1, 0, 1, 0] });
 }
