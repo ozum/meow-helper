@@ -7,7 +7,7 @@ import { readFileSync } from "fs";
 ```
 
 ```js
-const { default: getHelp, chalk } = require("meow-helper");
+const { default: getHelp, chalk } = require("meow-helper");
 const { readFileSync } = require("fs");
 ```
 
@@ -17,7 +17,7 @@ const flags = {
   verbose: { alias: "v", type: "boolean", desc: "Add extra info." }
 };
 
-const args = { path: "Path of file." };
+const args = { "path...": "Paths of files." };
 const pkg = JSON.parse(readFileSync(join(__dirname, "../../package.json"), { encoding: "utf8" }));
 
 meow(getHelp({ flags, args, pkg }), { flags, allowUnknownFlags: false });
@@ -31,7 +31,7 @@ const help = getHelp({
   command: "not-sync",
   description: "Description of the command",
   args: { path: "Path of file." },
-  flags,
+  flags, // meow flags with `desc` key.
   examples: ["not-sync node_modules,dist,coverage", "not-sync node_modules,dist,coverage --ignoreConfigs .gitignore"],
   multilineThreshold: 50,
   autoHelp: true,
@@ -41,7 +41,7 @@ const help = getHelp({
 
 # Details
 
-Generates single line or multiline help text. Decides automatically based on the `multilineThreshold` option.
+`meow-helper` generates single-line or multi-line help text based on the `multilineThreshold` option automatically.
 
 ## Single-Line
 ![meow-helper help text in single line mode](./module-files/images/single-line.png)
@@ -51,17 +51,18 @@ Generates single line or multiline help text. Decides automatically based on the
 
 # Highlights
 
-- Nicely formats, colorized, and aligns arguments, options, default values and their descriptions.
-- With the `allowUnknownFlags` option of meow, logs help if an unknown flag is provided. Also exits with code 0 instead of 2. Can be changed with the option `notThrow`.
+- Formats, colorizes, and aligns arguments, options, default values, and their descriptions.
+- `meow` throws unknown flags with the `allowUnknownFlags` option. `meow-helper` shows help text instead of throwing. We can change this behavior with the `notThrow` option.
 - Supports maximum line length and automatic word wrap.
-- Automatically split options into two lines if space for description is too small. (Can be changed with `multilineThreshold` option.)
-- Automatically switches single line to multi-line, if space for options descriptions is less than the `multilineThreshold` option.
+- Splits options into two lines if space for description is too small. We can change this behavior with the `multilineThreshold` option.)
+- Switches single line to multi-line if option descriptions have a small space. We can change this behavior with the `multilineThreshold` option.
 - Color output with background colored titles.
-- Automatically generates usage section.
-- Automatically colorize `command` in usage and examples if they start with command.
-- Automatically adds `$` at the beginning of manually provided usage and examples sections.
-- Also exports [chalk](https://www.npmjs.com/package/chalk) to be utilized by importing module without installing chalk.
-- Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds description to help if required.
+- Generates usage section.
+- Colorizes `command` at the start of usage and examples.
+- Adds `$` at the start of provided `usage` and `examples`.
+- Exports [chalk](https://www.npmjs.com/package/chalk).
+- Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds a description to help if required.
+- Moves three dots in arguments outside of brackets. For example: `args: { “path...” }` becomes `command <path>...`
 
 <!-- usage -->
 

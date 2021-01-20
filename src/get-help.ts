@@ -5,9 +5,9 @@ const cliui = require("cliui"); // eslint-disable-line @typescript-eslint/no-var
 
 export type ExtendedFlags = Record<string, AnyFlag & { desc: string }>;
 
-/** Options for generating a help text. */
+/** Options below modify behaviour of [[getHelp]] function. */
 export interface HelpOptions {
-  /** Line length to be used. Longer text will be word-wrapped. */
+  /** Text longer than line length will be word-wrapped. */
   lineLength?: number;
   /** The total length of the colored background area of titles. */
   titleLength?: number;
@@ -17,19 +17,19 @@ export interface HelpOptions {
   command?: string;
   /** Command description. */
   description?: string | string[];
-  /** A single usage or list of usages. If lines start with the command, it will be colored automatically. Also prefixed with `$`. */
+  /** Uasge text is shown at the beginning of help text. Lines are prefixed with `$` and command is colored automatically. */
   usage?: string | string[];
   /** Name and description of positional arguments. */
   args?: Record<string, string>;
   /** Flags provided to meow. Uses `desc` key for the description. */
   flags?: ExtendedFlags;
-  /** A single example or list of examples. If lines start with the command, it will be colored automatically. Also prefixed with `$`. */
+  /** A single example or list of examples can be provided to show in the help text. Lines are prefixed with `$` and the command is colored automatically. */
   examples?: string | string[];
   /** If space available for option descriptions is less than this threshold, descriptions are given their own rows. So they have more space. See images above. */
   multilineThreshold?: number;
-  /** Whether the auto-help function of `meow` is used. If true description is not added, because meow adds it automatically. */
+  /** This option sets whether the `autoHelp` option of `meow` is used. If this is true, the description text is not added, because meow adds it automatically. */
   autoHelp?: boolean;
-  /** Whether to throw an error when `meow` exists with exit code 2. If true, it adds `process.on("exit")` to show help and exits with code 0. */
+  /** Whether to throw an error when `meow` exits with exit code 2. If true, it adds `process.on("exit")` to show help and exits with code 0. */
   notThrow?: boolean;
   /** @ignore */
   ui?: any;
