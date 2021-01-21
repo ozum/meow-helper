@@ -1,8 +1,8 @@
-import chalk from "chalk";
+// import chalk from "chalk";
 import getHelp from "../src/index";
 import type { ExtendedAnyFlags } from "../src/get-help";
 
-chalk.level = 0;
+// chalk.level = 0;
 
 const cliFlags: ExtendedAnyFlags = {
   cwd: { alias: "c", type: "string", desc: "Set current working directory for relative paths." },
@@ -18,6 +18,8 @@ const cliFlags: ExtendedAnyFlags = {
     type: "boolean",
     desc: "Move files near original one for iCloudDrive. For example 'dist' is moved 'dist.nosync' in same directory.",
   },
+  colors: { alias: "c", type: "string", isMultiple: true, isRequired: true, desc: "Favorite colors." },
+  size: { alias: "s", type: "number", isRequired: () => true, desc: "Size." },
 };
 
 describe("getHelp()", () => {
@@ -36,6 +38,11 @@ describe("getHelp()", () => {
       flags: cliFlags,
       examples: "not-sync node_modules,dist,coverage",
     });
+    expect(help).toMatchSnapshot();
+  });
+
+  it("should render withot any alias.", () => {
+    const help = getHelp({ command: "not-sync", flags: { color: { desc: "color" }, size: { desc: "size" } } });
     expect(help).toMatchSnapshot();
   });
 

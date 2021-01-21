@@ -1,11 +1,12 @@
 {%- include "installation" -%}
 
-# Highlights
+# Features
 
-- Generates help text without effort.
+- Generates help text without effort. See images below.
 - Provides common flags. (`--help` and `--version`)
 - `meow` throws unknown flags with the `allowUnknownFlags` option. `meow-helper` shows help text instead of throwing. You can change this behavior with the `notThrow` option.
 - Formats, colorizes, and aligns arguments, options, default values, and their descriptions.
+- Marks required fields with an `*`.
 - Supports maximum line length and automatic word wrap.
 - Splits options into two lines if space for description is too small. You can change this behavior with the `multilineThreshold` option.)
 - Switches single line to multi-line if option descriptions have a small space. You can change this behavior with the `multilineThreshold` option.
@@ -16,6 +17,7 @@
 - Exports [chalk](https://www.npmjs.com/package/chalk) and [cliui](https://www.npmjs.com/package/cliui).
 - Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds a description to help if required.
 - Moves three dots in arguments outside of brackets. For example: `args: { “path...” }` becomes `command <path>...`
+- Adds three dots `...` to flags with multiple value.
 
 # Synopsis
 
@@ -25,6 +27,7 @@
 import getHelp, { commonFlags, chalk, cliui } from "meow-helper";
 import type { ExtendedAnyFlags } from "meow-helper";
 import { readFileSync } from "fs";
+import { join } from "path";
 ```
 
 **CommonJS**
@@ -34,8 +37,10 @@ const { default: getHelp, commonFlags, chalk, cliui } = require("meow-helper");
 const { readFileSync } = require("fs");
 ```
 
+**Usage**
+
 ```ts
-const flags: ExtendedAnyFlags = { cwd: { alias: "c", type: "string", desc: "Current CWD." }, ...commonFlags };
+const flags: ExtendedAnyFlags = { cwd: { alias: "c", type: "string", desc: "Working path." }, ...commonFlags };
 const args = { "path...": "Paths of files." };
 const pkg = JSON.parse(readFileSync(join(__dirname, "../package.json"), { encoding: "utf8" }));
 

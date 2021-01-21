@@ -2,116 +2,143 @@
 
 exports[`getHelp() should generate help without options. 1`] = `
 "
-     USAGE     
+[1m[7m[32m     USAGE     [39m[27m[22m
 
-$ not-sync <path>
+[2m$[22m [32mnot-sync[39m [36m<path>[39m
 
-   ARGUMENTS   
+[1m[7m[36m   ARGUMENTS   [39m[27m[22m
 
-<path> some
+[36m<path>[39m some
 "
 `;
 
 exports[`getHelp() should generate name details if \`autoHelp\` is false. 1`] = `
 "
-not-sync
+[1m[32mnot-sync[39m[22m
 
 Desc
 
-     USAGE     
+[1m[7m[32m     USAGE     [39m[27m[22m
 
-$ not-sync
+[2m$[22m [32mnot-sync[39m
 "
 `;
 
 exports[`getHelp() should generate name details without command and description if \`autoHelp\` is false. 1`] = `
 "
-not-sync
+[1m[32mnot-sync[39m[22m
 
-     USAGE     
+[1m[7m[32m     USAGE     [39m[27m[22m
 
-$ not-sync <path>...
+[2m$[22m [32mnot-sync[39m [36m<path>...[39m
 
-   ARGUMENTS   
+[1m[7m[36m   ARGUMENTS   [39m[27m[22m
 
-<path>... some
+[36m<path>...[39m some
 "
 `;
 
 exports[`getHelp() should generate options without any default value. 1`] = `
 "
-     USAGE     
+[1m[7m[32m     USAGE     [39m[27m[22m
 
-$ not-sync [options]
+[2m$[22m [32mnot-sync[39m [33m[options][39m
 
-    OPTIONS    
+[1m[7m[33m    OPTIONS    [39m[27m[22m
 
---path     a
---cwd      b
+[33m--path[39m  a
+[33m--cwd[39m   b
+"
+`;
+
+exports[`getHelp() should render withot any alias. 1`] = `
+"
+[1m[7m[32m     USAGE     [39m[27m[22m
+
+[2m$[22m [32mnot-sync[39m [33m[options][39m
+
+[1m[7m[33m    OPTIONS    [39m[27m[22m
+
+[33m--color[39m  color
+[33m--size[39m   size
 "
 `;
 
 exports[`getHelp() should return help text. 1`] = `
 "
-     USAGE     
+[1m[7m[32m     USAGE     [39m[27m[22m
 
-$ not-sync [options] <path>...
-$ not-sync <path>...
+[2m$[22m [32mnot-sync[39m [options] <path>...
+[2m$[22m [32mnot-sync[39m <path>...
 
-   ARGUMENTS   
+[1m[7m[36m   ARGUMENTS   [39m[27m[22m
 
-<path> Path or list of paths to disable syncronization for.
-<cli>  use cli
+[36m<path>[39m Path or list of paths to disable syncronization for.
+[36m<cli>[39m  use cli
 
-    OPTIONS    
+[1m[7m[33m    OPTIONS    [39m[27m[22m
 
--c --cwd
+[33m-c[39m [33m--cwd[39m
      Set current working directory for relative paths.
--i --ignoreConfigs                                  (Default: node_modules,dist)
+[33m-i[39m [33m--ignoreConfigs[39m                                  [2m(Default: [22m[33mnode_modules,dist[39m[2m)[22m
      (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add
      new created files if any.
--d --dry
+[33m-d[39m [33m--dry[39m
      Prevents changes to be written to disk. Executes a dry run.
--v --verbose                                                     (Default: true)
+[33m-v[39m [33m--verbose[39m                                                     [2m(Default: [22m[33mtrue[39m[2m)[22m
      Outputs extra information.
---linkSameDir
+   [33m--linkSameDir[39m
      Move files near original one for iCloudDrive. For example 'dist' is moved
      'dist.nosync' in same directory.
+[33m-c[39m [33m--colors...[39m[31m*[39m
+     Favorite colors.
+[33m-s[39m [33m--size[39m
+     Size.
 
-    EXAMPLES   
+[31m*[39m Required field.
 
-$ not-sync node_modules,dist,coverage
+[1m[7m[35m    EXAMPLES   [39m[27m[22m
+
+[2m$[22m [32mnot-sync[39m node_modules,dist,coverage
 "
 `;
 
 exports[`getHelp() should use default values. 1`] = `
 "
-     USAGE     
+[1m[7m[32m     USAGE     [39m[27m[22m
 
-$ not-sync [options]
+[2m$[22m [32mnot-sync[39m [33m[options][39m
 
-    OPTIONS    
+[1m[7m[33m    OPTIONS    [39m[27m[22m
 
--c --cwd                                        Set current working directory for relative paths.
--i --ignoreConfigs (Default: node_modules,dist) (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add new created files if any.
--d --dry                                        Prevents changes to be written to disk. Executes a dry run.
--v --verbose       (Default: true)              Outputs extra information.
---linkSameDir                                   Move files near original one for iCloudDrive. For example 'dist' is moved 'dist.nosync' in same directory.
+[33m-c[39m [33m--cwd[39m                                            Set current working directory for relative paths.
+[33m-i[39m [33m--ignoreConfigs[39m     [2m(Default: [22m[33mnode_modules,dist[39m[2m)[22m (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add new created files if any.
+[33m-d[39m [33m--dry[39m                                            Prevents changes to be written to disk. Executes a dry run.
+[33m-v[39m [33m--verbose[39m           [2m(Default: [22m[33mtrue[39m[2m)[22m              Outputs extra information.
+   [33m--linkSameDir[39m                                    Move files near original one for iCloudDrive. For example 'dist' is moved 'dist.nosync' in same directory.
+[33m-c[39m [33m--colors...[39m[31m*[39m                                     Favorite colors.
+[33m-s[39m [33m--size[39m                                           Size.
+
+[31m*[39m Required field.
 "
 `;
 
 exports[`getHelp() should use package.json data. 1`] = `
 "
-     USAGE     
+[1m[7m[32m     USAGE     [39m[27m[22m
 
-$ not-sync [options]
+[2m$[22m [32mnot-sync[39m [33m[options][39m
 
-    OPTIONS    
+[1m[7m[33m    OPTIONS    [39m[27m[22m
 
--c --cwd                                        Set current working directory for relative paths.
--i --ignoreConfigs (Default: node_modules,dist) (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add new created files if any.
--d --dry                                        Prevents changes to be written to disk. Executes a dry run.
--v --verbose       (Default: true)              Outputs extra information.
---linkSameDir                                   Move files near original one for iCloudDrive. For example 'dist' is moved 'dist.nosync' in same directory.
+[33m-c[39m [33m--cwd[39m                                            Set current working directory for relative paths.
+[33m-i[39m [33m--ignoreConfigs[39m     [2m(Default: [22m[33mnode_modules,dist[39m[2m)[22m (CSV) Ignore configuration files (e.g. .gitignore, .prettierignore) to add new created files if any.
+[33m-d[39m [33m--dry[39m                                            Prevents changes to be written to disk. Executes a dry run.
+[33m-v[39m [33m--verbose[39m           [2m(Default: [22m[33mtrue[39m[2m)[22m              Outputs extra information.
+   [33m--linkSameDir[39m                                    Move files near original one for iCloudDrive. For example 'dist' is moved 'dist.nosync' in same directory.
+[33m-c[39m [33m--colors...[39m[31m*[39m                                     Favorite colors.
+[33m-s[39m [33m--size[39m                                           Size.
+
+[31m*[39m Required field.
 "
 `;

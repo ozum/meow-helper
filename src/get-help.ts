@@ -4,7 +4,7 @@ import chalk from "chalk";
 const cliui = require("cliui"); // eslint-disable-line @typescript-eslint/no-var-requires
 
 /** Meow flag extended with `desc` key. */
-export type ExtendedAnyFlag = AnyFlag & { desc: string };
+export type ExtendedAnyFlag = AnyFlag & { desc?: string };
 
 /** Record of extended any flag. */
 export type ExtendedAnyFlags = Record<string, ExtendedAnyFlag>;
@@ -59,15 +59,36 @@ export function arrify<T>(input?: T | T[]): T[] {
   return Array.isArray(input) ? input : [input];
 }
 
+/** Checks whether any option has alias. */
+function hasAnyAlias(flags: ExtendedAnyFlags): boolean {
+  return Object.values(flags).some((flag) => flag.alias !== undefined);
+}
+
+/** Checks whether any option is required. */
+function hasAnyRequired(flags: ExtendedAnyFlags): boolean {
+  return Object.values(flags).some((flag) => flag.isRequired === true);
+}
+
+/** Checks whether any option is required. */
+function hasAnyMulitple(flags: ExtendedAnyFlags): boolean {
+  return Object.values(flags).some((flag) => flag.isMultiple);
+}
+
 /** Get maximum length of option name, default value length and argument name. */
-function getMaxLengths({ flags, args }: Required<HelpOptions>): { maxNameLength: number; maxDefaultLength: number; maxArgLength: number } {
-  const maxNameLength = Object.keys(flags).reduce((currentMax, name) => (name.length + 6 > currentMax ? name.length + 6 : currentMax), 0);
-  const maxDefaultLength = Object.entries(flags).reduce((currentMax, [, flag]) => {
+function getMaxLengths({
+  flags,
+  args,
+}: Required<HelpOptions>): { maxNameLength: number; maxDefaultLength: number; maxArgLength: number; aliasLength: number } {
+  const requiredSpace = hasAnyRequired(flags) ? 1 : 0; // Length of asterisk.
+  const multipleSpace = hasAnyMulitple(flags) ? 3 : 0; // Length of ...
+  const space = requiredSpace + multipleSpace + 3; // Length of others + (name length = double dash + space = 3).
+  const maxNameLength = Object.keys(flags).reduce((max, name) => (name.length + space > max ? name.length + space : max), 0);
+  const maxDefaultLength = Object.values(flags).reduce((max, flag) => {
     const currentLength = flag.default ? flag.default.toString().length + 12 : 0;
-    return currentLength > currentMax ? currentLength : currentMax;
+    return currentLength > max ? currentLength : max;
   }, 1);
-  const maxArgLength = Object.keys(args).reduce((currentMax, name) => (name.length + 3 > currentMax ? name.length + 3 : currentMax), 0);
-  return { maxNameLength, maxDefaultLength, maxArgLength };
+  const maxArgLength = Object.keys(args).reduce((max, name) => (name.length + 3 > max ? name.length + 3 : max), 0);
+  return { maxNameLength, maxDefaultLength, maxArgLength, aliasLength: hasAnyAlias(flags) ? 3 : 0 };
 }
 
 /** Return arg name colorized and between brackets (`<>`). If arg name ends with `...`, add `...` after bracket. */
@@ -120,26 +141,28 @@ function addArguments(maxArgLength: number, options: Required<HelpOptions>): voi
 }
 
 /** Add command options to help text. */
-function addOptions(maxNameLength: number, maxDefaultLength: number, options: Required<HelpOptions>): void {
+function addOptions(maxNameLength: number, maxDefaultLength: number, aliasLength: number, options: Required<HelpOptions>): void {
   const { flags } = options;
   if (!flags || Object.keys(flags).length === 0) return;
-
-  const singleRow = options.lineLength - (maxNameLength + maxDefaultLength) > options.multilineThreshold;
+  const singleRow = options.lineLength - (maxNameLength + maxDefaultLength + aliasLength) > options.multilineThreshold;
   addTitle("options", options);
+
   Object.entries(flags).forEach(([flagName, flag]) => {
-    const alias = flag.alias ? `-${flag.alias}` : "  ";
+    const required = flag.isRequired === true ? chalk.red("*") : "";
+    const multiple = flag.isMultiple ? "..." : "";
     const defaultValue = flag.default ? chalk`{dim (Default: }{yellow ${flag.default}}{dim )}` : "";
-    if (singleRow) {
-      options.ui.div(
-        { text: chalk`{yellow ${alias} --${flagName}}`, width: maxNameLength },
-        { text: defaultValue, width: maxDefaultLength },
-        { text: flag.desc }
-      );
-    } else {
-      options.ui.div({ text: chalk`{yellow ${alias} --${flagName}}` }, { text: defaultValue, align: "right" });
-      options.ui.div({ text: flag.desc, padding: [0, 0, 0, 5] });
-    }
+    const aliasCOlumn = { text: flag.alias ? chalk`{yellow -${flag.alias}}` : "", width: 3 };
+
+    const nameColumn = { text: chalk`{yellow --${flagName}${multiple}}${required}`, width: maxNameLength };
+    const firstRow = singleRow
+      ? [aliasCOlumn, nameColumn, { text: defaultValue, width: maxDefaultLength }, { text: flag.desc }]
+      : [aliasCOlumn, nameColumn, { text: defaultValue, align: "right" }];
+    if (aliasLength === 0) firstRow.shift();
+    options.ui.div(...firstRow);
+    if (!singleRow) options.ui.div({ text: flag.desc, padding: [0, 0, 0, 5] });
   });
+
+  if (hasAnyRequired(flags)) options.ui.div({ text: chalk`{red *} Required field.`, padding: [1, 0, 0, 0] });
 }
 
 /**
@@ -174,7 +197,7 @@ export default function getHelp(helpOptions: HelpOptions): string {
   };
 
   if (!options.command) throw new Error("Either 'command' or 'pkg' with name is required.");
-  const { maxNameLength, maxDefaultLength, maxArgLength } = getMaxLengths(options);
+  const { maxNameLength, maxDefaultLength, maxArgLength, aliasLength } = getMaxLengths(options);
 
   // meow autoHelp shows description from package.json automatically.
   if (!options.autoHelp) {
@@ -184,7 +207,7 @@ export default function getHelp(helpOptions: HelpOptions): string {
 
   addUsage(options);
   addArguments(maxArgLength, options);
-  addOptions(maxNameLength, maxDefaultLength, options);
+  addOptions(maxNameLength, maxDefaultLength, aliasLength, options);
   addExamples(options);
   ui.div("");
   const help = options.ui.toString();
