@@ -98,7 +98,7 @@ function getArg(arg: string): string {
 
 /** Colorize command if string starts with command. */
 function colorizeCommand(text: string, options: Required<HelpOptions>): string {
-  return text.replace(new RegExp(`^(${options.command})`), chalk`{green $1}`);
+  return text.replace(new RegExp(`^(${options.command})`), chalk`{dim $} {green $1}`);
 }
 
 /** Add title to help text. */
@@ -113,9 +113,8 @@ function addTitle(title: keyof typeof TITLE_COLORS, options: Required<HelpOption
 function addUsage(options: Required<HelpOptions>): void {
   const usage = arrify(options.usage);
   addTitle("usage", options);
-  if (usage.length > 0) {
-    usage.forEach((line) => options.ui.div(chalk`{dim $} ${colorizeCommand(line, options)}`));
-  } else {
+  if (usage.length > 0) usage.forEach((line) => options.ui.div(colorizeCommand(line, options)));
+  else {
     const flagsText = options.flags && Object.keys(options.flags).length > 0 ? `${yellow("[options]")} ` : "";
     const argsText = options.args && Object.keys(options.args).length > 0 ? Object.keys(options.args).map(getArg) : "";
     options.ui.div(chalk`{dim $} {green ${options.command}} ${flagsText}${argsText}`);
@@ -127,7 +126,7 @@ function addExamples(options: Required<HelpOptions>): void {
   const examples = arrify(options.examples);
   if (examples.length > 0) {
     addTitle("examples", options);
-    examples.forEach((line) => options.ui.div(chalk`{dim $} ${colorizeCommand(line, options)}`));
+    examples.forEach((line) => options.ui.div(colorizeCommand(line, options)));
   }
 }
 

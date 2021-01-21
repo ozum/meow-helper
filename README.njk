@@ -8,12 +8,9 @@
 - Formats, colorizes, and aligns arguments, options, default values, and their descriptions.
 - Marks required fields with an `*`.
 - Supports maximum line length and automatic word wrap.
-- Splits options into two lines if space for description is too small. You can change this behavior with the `multilineThreshold` option.)
-- Switches single line to multi-line if option descriptions have a small space. You can change this behavior with the `multilineThreshold` option.
-- Color output with background colored titles.
-- Generates usage section.
-- Colorizes `command` at the start of usage and examples.
-- Adds `$` at the start of provided `usage` and `examples`.
+- Splits options into two lines if space for description is too small. You can change this behavior with the `multilineThreshold` option.
+- Generates description, usage, arguments, flags/options, examples sections.
+- Colorizes command in usage and examples and adds `$` before command.
 - Exports [chalk](https://www.npmjs.com/package/chalk) and [cliui](https://www.npmjs.com/package/cliui).
 - Supports both `{ autoHelp: true }` and `{ autoHelp: false }`. Adds a description to help if required.
 - Moves three dots in arguments outside of brackets. For example: `args: { “path...” }` becomes `command <path>...`
