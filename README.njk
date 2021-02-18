@@ -37,11 +37,23 @@ const { readFileSync } = require("fs");
 **Usage**
 
 ```ts
-const flags: ExtendedAnyFlags = { cwd: { alias: "c", type: "string", desc: "Working path." }, ...commonFlags };
+const flags: ExtendedAnyFlags = {
+  name: { alias: "n", type: "string", desc: "Name" },
+  cwd: { alias: "c", type: "string", desc: "Working path." },
+  context: { type: "string", desc: "Context." },
+  ...commonFlags
+};
+
+// Groups options. Keys are the first option of the group.
+const groups = {
+  name: { title: "General Options", description: "Some description" },
+  context: { title: "Other Options", description: "Other description" },
+}
+
 const args = { "path...": "Paths of files." };
 const pkg = JSON.parse(readFileSync(join(__dirname, "../package.json"), { encoding: "utf8" }));
 
-meow(getHelp({ flags, args, pkg }), { flags, pkg, allowUnknownFlags: false });
+meow(getHelp({ flags, args, groups, pkg }), { flags, pkg, allowUnknownFlags: false });
 ```
 
 ```ts

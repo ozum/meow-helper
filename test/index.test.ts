@@ -34,9 +34,10 @@ describe("getHelp()", () => {
       lineLength: 80,
       usage: ["not-sync [options] <path>...", "not-sync <path>..."],
       description: "Disable file synchronization for files in an auto detected cloud storage such as Dropbox, iCloudDrive or OneDrive.",
-      args: { path: "Path or list of paths to disable syncronization for.", cli: "use cli" },
+      args: { "path*": "Path or list of paths to disable syncronization for.", cli: "use cli" },
       flags: cliFlags,
       examples: "not-sync node_modules,dist,coverage",
+      groups: { cwd: { title: "General Options", description: "General description." }, colors: { title: "Appereance Options" } },
     });
     expect(help).toMatchSnapshot();
   });

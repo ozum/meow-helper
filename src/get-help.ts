@@ -35,6 +35,8 @@ export interface HelpOptions {
   autoHelp?: boolean;
   /** Whether to throw an error when `meow` exits with exit code 2. If true, it adds `process.on("exit")` to show help and exits with code 0. */
   notThrow?: boolean;
+  /** Option groups shown in help text. Key is the first option in group. */
+  groups?: Record<string, { title?: string; description?: string }>;
   /** @ignore */
   ui?: any;
 }
@@ -64,8 +66,13 @@ function hasAnyAlias(flags: ExtendedAnyFlags): boolean {
   return Object.values(flags).some((flag) => flag.alias !== undefined);
 }
 
-/** Checks whether any option is required. */
-function hasAnyRequired(flags: ExtendedAnyFlags): boolean {
+/** Checks whether any option has alias. */
+function hasAnyRequiredArgs(args: Record<string, string>): boolean {
+  return Object.keys(args).some((arg) => arg.endsWith("*"));
+}
+
+/** Checks whether any args is required. */
+function hasAnyRequiredFlags(flags: ExtendedAnyFlags): boolean {
   return Object.values(flags).some((flag) => flag.isRequired === true);
 }
 
@@ -79,7 +86,7 @@ function getMaxLengths({
   flags,
   args,
 }: Required<HelpOptions>): { maxNameLength: number; maxDefaultLength: number; maxArgLength: number; aliasLength: number } {
-  const requiredSpace = hasAnyRequired(flags) ? 1 : 0; // Length of asterisk.
+  const requiredSpace = hasAnyRequiredFlags(flags) ? 1 : 0; // Length of asterisk.
   const multipleSpace = hasAnyMulitple(flags) ? 3 : 0; // Length of ...
   const space = requiredSpace + multipleSpace + 3; // Length of others + (name length = double dash + space = 3).
   const maxNameLength = Object.keys(flags).reduce((max, name) => (name.length + space > max ? name.length + space : max), 0);
@@ -91,9 +98,11 @@ function getMaxLengths({
   return { maxNameLength, maxDefaultLength, maxArgLength, aliasLength: hasAnyAlias(flags) ? 3 : 0 };
 }
 
-/** Return arg name colorized and between brackets (`<>`). If arg name ends with `...`, add `...` after bracket. */
+/** Return arg name colorized and between brackets (`<>`). If arg name ends with `...`, add `...` after bracket. Add red "*" to required args. */
 function getArg(arg: string): string {
-  return cyan(arg.endsWith("...") ? `<${arg.replace(/...$/, "")}>...` : `<${arg}>`);
+  const required = arg.endsWith("*") ? chalk.red("*") : "";
+  arg = arg.replace("*", ""); // eslint-disable-line no-param-reassign
+  return cyan(arg.endsWith("...") ? `<${arg.replace(/...$/, "")}>...` : `<${arg}>`) + required;
 }
 
 /** Colorize command if string starts with command. */
@@ -139,6 +148,12 @@ function addArguments(maxArgLength: number, options: Required<HelpOptions>): voi
   });
 }
 
+function addGroup(flagName: string, options: Required<HelpOptions>, index: number): void {
+  const group = options.groups[flagName];
+  options.ui.div({ text: chalk.yellow.dim(`${group.title}:`), padding: [index === 0 ? 0 : 1, 0, 0, 0] });
+  if (group.description) options.ui.div({ text: chalk.yellow.dim(group.description) });
+}
+
 /** Add command options to help text. */
 function addOptions(maxNameLength: number, maxDefaultLength: number, aliasLength: number, options: Required<HelpOptions>): void {
   const { flags } = options;
@@ -146,12 +161,13 @@ function addOptions(maxNameLength: number, maxDefaultLength: number, aliasLength
   const singleRow = options.lineLength - (maxNameLength + maxDefaultLength + aliasLength) > options.multilineThreshold;
   addTitle("options", options);
 
-  Object.entries(flags).forEach(([flagName, flag]) => {
+  Object.entries(flags).forEach(([flagName, flag], i) => {
+    if (options.groups[flagName]) addGroup(flagName, options, i);
+
     const required = flag.isRequired === true ? chalk.red("*") : "";
     const multiple = flag.isMultiple ? "..." : "";
     const defaultValue = flag.default ? chalk`{dim (Default: }{yellow ${flag.default}}{dim )}` : "";
     const aliasCOlumn = { text: flag.alias ? chalk`{yellow -${flag.alias}}` : "", width: 3 };
-
     const nameColumn = { text: chalk`{yellow --${flagName}${multiple}}${required}`, width: maxNameLength };
     const firstRow = singleRow
       ? [aliasCOlumn, nameColumn, { text: defaultValue, width: maxDefaultLength }, { text: flag.desc }]
@@ -160,8 +176,6 @@ function addOptions(maxNameLength: number, maxDefaultLength: number, aliasLength
     options.ui.div(...firstRow);
     if (!singleRow) options.ui.div({ text: flag.desc, padding: [0, 0, 0, 5] });
   });
-
-  if (hasAnyRequired(flags)) options.ui.div({ text: chalk`{red *} Required field.`, padding: [1, 0, 0, 0] });
 }
 
 /**
@@ -191,6 +205,7 @@ export default function getHelp(helpOptions: HelpOptions): string {
     multilineThreshold: 50,
     autoHelp: true,
     notThrow: true,
+    groups: {},
     ...helpOptions,
     ui,
   };
@@ -207,6 +222,8 @@ export default function getHelp(helpOptions: HelpOptions): string {
   addUsage(options);
   addArguments(maxArgLength, options);
   addOptions(maxNameLength, maxDefaultLength, aliasLength, options);
+  if (hasAnyRequiredFlags(options.flags) || hasAnyRequiredArgs(options.args))
+    options.ui.div({ text: chalk`{red *} Required field.`, padding: [1, 0, 0, 0] });
   addExamples(options);
   ui.div("");
   const help = options.ui.toString();
