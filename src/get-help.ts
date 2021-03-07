@@ -1,5 +1,6 @@
 import type { AnyFlag } from "meow";
 import chalk from "chalk";
+import dashify from "dashify";
 
 const cliui = require("cliui"); // eslint-disable-line @typescript-eslint/no-var-requires
 
@@ -167,11 +168,11 @@ function addOptions(maxNameLength: number, maxDefaultLength: number, aliasLength
     const required = flag.isRequired === true ? chalk.red("*") : "";
     const multiple = flag.isMultiple ? "..." : "";
     const defaultValue = flag.default ? chalk`{dim (Default: }{yellow ${flag.default}}{dim )}` : "";
-    const aliasCOlumn = { text: flag.alias ? chalk`{yellow -${flag.alias}}` : "", width: 3 };
+    const aliasColumn = { text: flag.alias && flag.alias.length === 1 ? chalk`{yellow -${flag.alias}}` : "", width: 3 };
     const nameColumn = { text: chalk`{yellow --${flagName}${multiple}}${required}`, width: maxNameLength };
     const firstRow = singleRow
-      ? [aliasCOlumn, nameColumn, { text: defaultValue, width: maxDefaultLength }, { text: flag.desc }]
-      : [aliasCOlumn, nameColumn, { text: defaultValue, align: "right" }];
+      ? [aliasColumn, nameColumn, { text: defaultValue, width: maxDefaultLength }, { text: flag.desc }]
+      : [aliasColumn, nameColumn, { text: defaultValue, align: "right" }];
     if (aliasLength === 0) firstRow.shift();
     options.ui.div(...firstRow);
     if (!singleRow) options.ui.div({ text: flag.desc, padding: [0, 0, 0, 5] });
@@ -218,6 +219,10 @@ export default function getHelp(helpOptions: HelpOptions): string {
     ui.div({ text: chalk`{bold.green ${options.command}}`, padding: [1, 0, 0, 0] });
     if (options.description) options.ui.div({ text: `${options.description}`, padding: [1, 0, 0, 0] });
   }
+
+  // TODO: TEMP WORKAROUND FOR https://github.com/sindresorhus/meow/issues/178
+  // Add alias to all non-aliased flags. Remove this after a solution found.
+  Object.entries(options.flags).forEach(([name, flag]: any) => (flag.alias = flag.alias ?? dashify(name))); // eslint-disable-line
 
   addUsage(options);
   addArguments(maxArgLength, options);
