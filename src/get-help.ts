@@ -222,7 +222,9 @@ export default function getHelp(helpOptions: HelpOptions): string {
 
   // TODO: TEMP WORKAROUND FOR https://github.com/sindresorhus/meow/issues/178
   // Add alias to all non-aliased flags. Remove this after a solution found.
-  Object.entries(options.flags).filter(([name, {alias}]) => alias === undefined && name !== dashify(name)).forEach(([name, flag]: any) => (flag.alias =   dashify(name))); // eslint-disable-line
+  Object.entries(options.flags)
+    .filter(([name, { alias }]) => alias === undefined && name !== dashify(name))
+    .forEach(([name, flag]: any) => (flag.alias = dashify(name))); // eslint-disable-line
 
   addUsage(options);
   addArguments(maxArgLength, options);
